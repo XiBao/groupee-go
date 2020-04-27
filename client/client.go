@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html"
 	"net"
 	"net/http"
 	"time"
@@ -42,7 +43,8 @@ func (this *Client) SetResponseTimeout(t time.Duration) {
 }
 
 func (this *Client) Sign(req *model.EventRequest) string {
-	rawSign := fmt.Sprintf("%s%d%s%d%s", this.Secret, this.Key, req.Payload, req.Timestamp, this.Secret)
+	payload := html.UnescapeString(req.Payload)
+	rawSign := fmt.Sprintf("%s%s%s%d%s", this.Secret, this.Key, payload, req.Timestamp, this.Secret)
 	return Md5(rawSign)
 }
 
