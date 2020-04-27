@@ -31,12 +31,12 @@ type Event struct {
 }
 
 type EventRequest struct {
-	Payload   string `json:"payload,omitempty"`
-	Timestamp int64  `json:"timestamp,omitempty"`
-	Sign      string `json:"sign,omitempty"`
-	Key       string `json:"key,omitempty"`
-	Code      int    `json:"code,omitempty"`
-	ErrMsg    string `json:"msg,omitempty"`
+	Payload   string `form:"payload" json:"payload,omitempty" binding:"required"`
+	Timestamp int64  `form:"timestamp" json:"timestamp,omitempty" binding:"required"`
+	Sign      string `form:"sign" json:"sign,omitempty" binding:"required"`
+	Key       string `form:"key" json:"key,omitempty" binding:"required"`
+	Code      int    `form:"code" json:"code,omitempty"`
+	ErrMsg    string `form:"msg" json:"msg,omitempty"`
 }
 
 func (this *EventRequest) IsError() bool {
