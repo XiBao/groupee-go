@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+	"html"
 )
 
 type Event struct {
@@ -52,6 +53,7 @@ func (this *EventRequest) Event() (*Event, error) {
 		return nil, nil
 	}
 	var event Event
-	err := json.Unmarshal([]byte(this.Payload), &event)
+	payload := html.UnescapeString(req.Payload)
+	err := json.Unmarshal([]byte(payload), &event)
 	return &event, err
 }
