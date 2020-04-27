@@ -47,7 +47,7 @@ func (this *Client) Sign(req *model.EventRequest) string {
 }
 
 func (this *Client) NewRequest(event *model.Event) *model.EventRequest {
-	buf, _ := json.Marshal(this)
+	buf, _ := json.Marshal(event)
 	req := &model.EventRequest{
 		Payload:   string(buf),
 		Timestamp: time.Now().Unix(),
@@ -60,7 +60,6 @@ func (this *Client) NewRequest(event *model.Event) *model.EventRequest {
 func (this *Client) SendEvent(gateway string, event *model.Event) (*model.Event, error) {
 	eventReq := this.NewRequest(event)
 	buf, _ := json.Marshal(eventReq)
-	fmt.Println(string(buf))
 	request, err := http.NewRequest("POST", gateway, bytes.NewReader(buf))
 	if err != nil {
 		return nil, err
