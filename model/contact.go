@@ -7,6 +7,7 @@ type Group struct {
 }
 
 type Contact struct {
-	Id   string `json:"id,omitempty"`
-	Nick string `json:"nick,omitempty"`
+	Id     string `json:"id,omitempty"`
+	Nick   string `json:"nick,omitempty"`
+	Avatar string `json:"avatar,omitempty"`
 }
