@@ -48,7 +48,7 @@ func (this *Client) Sign(req *model.EventRequest) string {
 	return Md5(rawSign)
 }
 
-func (this *Client) NewRequest(events []*model.Event) *model.EventRequest {
+func (this *Client) NewRequest(events []model.Event) *model.EventRequest {
 	buf, _ := json.Marshal(events)
 	req := &model.EventRequest{
 		Payload:   string(buf),
