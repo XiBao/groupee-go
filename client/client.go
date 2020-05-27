@@ -60,7 +60,7 @@ func (this *Client) NewRequest(events []model.Event) *model.EventRequest {
 }
 
 func (this *Client) SendEvent(gateway string, event *model.Event) ([]model.Event, error) {
-	eventReq := this.NewRequest([]*model.Event{event})
+	eventReq := this.NewRequest([]model.Event{*event})
 	buf, _ := json.Marshal(eventReq)
 	request, err := http.NewRequest("POST", gateway, bytes.NewReader(buf))
 	if err != nil {
