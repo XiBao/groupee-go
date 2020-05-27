@@ -55,7 +55,6 @@ func (this *EventRequest) Events() ([]Event, error) {
 	}
 	var events []Event
 	payload := html.UnescapeString(this.Payload)
-	fmt.Println(payload)
 	err := json.Unmarshal([]byte(payload), &events)
 	return events, err
 }
