@@ -98,6 +98,5 @@ func (this *Client) SendEvent(gateway string, event *model.Event) ([]model.Event
 	if eventResp.Payload != "" && this.Sign(&eventResp) != eventResp.Sign {
 		return nil, errors.New("invalid sign")
 	}
-	fmt.Println(eventResp.Payload)
 	return eventResp.Events()
 }
