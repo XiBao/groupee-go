@@ -59,7 +59,18 @@ func (this *Client) NewRequest(event *model.Event) *model.EventRequest {
 	return req
 }
 
-func (this *Client) SendEvent(gateway string, event *model.Event) (*model.Event, error) {
+func (this *Client) NewRequestWithEvents(events []*model.Event) *model.EventRequest {
+	buf, _ := json.Marshal(events)
+	req := &model.EventRequest{
+		Payload:   string(buf),
+		Timestamp: time.Now().Unix(),
+		Key:       this.Key,
+	}
+	req.Sign = this.Sign(req)
+	return req
+}
+
+func (this *Client) SendEvent(gateway string, event *model.Event) ([]model.Event, error) {
 	eventReq := this.NewRequest(event)
 	buf, _ := json.Marshal(eventReq)
 	request, err := http.NewRequest("POST", gateway, bytes.NewReader(buf))
@@ -98,5 +109,5 @@ func (this *Client) SendEvent(gateway string, event *model.Event) (*model.Event,
 	if eventResp.Payload != "" && this.Sign(&eventResp) != eventResp.Sign {
 		return nil, errors.New("invalid sign")
 	}
-	return eventResp.Event()
+	return eventResp.Events()
 }

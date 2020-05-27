@@ -49,12 +49,12 @@ func (this EventRequest) Error() string {
 	return fmt.Sprintf("CODE: %d, MSG: %s", this.Code, this.ErrMsg)
 }
 
-func (this *EventRequest) Event() (*Event, error) {
+func (this *EventRequest) Events() ([]Event, error) {
 	if this.Payload == "" {
 		return nil, nil
 	}
-	var event Event
+	var events []Event
 	payload := html.UnescapeString(this.Payload)
-	err := json.Unmarshal([]byte(payload), &event)
-	return &event, err
+	err := json.Unmarshal([]byte(payload), &events)
+	return events, err
 }
