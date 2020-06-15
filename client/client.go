@@ -15,6 +15,7 @@ import (
 
 const (
 	DEFAULT_CONNECT_TIMEOUT  time.Duration = 100
+	DEFAULT_DEADLINE_TIMEOUT time.Duration = 300
 	DEFAULT_RESPONSE_TIMEOUT time.Duration = 100
 )
 
@@ -22,6 +23,7 @@ type Client struct {
 	Key             string
 	Secret          string
 	connectTimeout  time.Duration
+	deadlineTimeout time.Duration
 	responseTimeout time.Duration
 }
 
@@ -30,6 +32,7 @@ func NewClient(key string, secret string) *Client {
 		Key:             key,
 		Secret:          secret,
 		connectTimeout:  DEFAULT_CONNECT_TIMEOUT,
+		deadlineTimeout: DEFAULT_DEADLINE_TIMEOUT,
 		responseTimeout: DEFAULT_RESPONSE_TIMEOUT,
 	}
 }
@@ -76,7 +79,7 @@ func (this *Client) SendEvent(gateway string, event *model.Event) ([]model.Event
 				if err != nil {
 					return nil, err
 				}
-				conn.SetDeadline(time.Now().Add(time.Millisecond * this.connectTimeout))
+				conn.SetDeadline(time.Now().Add(time.Millisecond * this.deadlineTimeout))
 				return conn, nil
 			},
 			ResponseHeaderTimeout: time.Millisecond * this.responseTimeout,
