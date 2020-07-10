@@ -3,6 +3,7 @@ package model
 type Group struct {
 	Id     Uint64            `json:"id,omitempty"`
 	Name   string            `json:"name,omitempty"`
+	IsWork uint              `json:"is_work,omitempty"`
 	Tracks map[string]string `json:"tracks,omitempty"`
 }
 
