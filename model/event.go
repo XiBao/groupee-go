@@ -30,6 +30,7 @@ type Event struct {
 	CreateTime     int64      `json:"create_time,omitempty"`
 	Group          *Group     `json:"group,omitempty"`
 	AtList         string     `json:"at_list,omitempty"`
+	Tags           []string   `json:"tags,omitempty"`
 }
 
 type EventRequest struct {
