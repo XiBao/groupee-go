@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"html"
-	"net"
 	"net/http"
 	"time"
 
@@ -14,35 +13,25 @@ import (
 )
 
 const (
-	DEFAULT_CONNECT_TIMEOUT  time.Duration = 100
-	DEFAULT_DEADLINE_TIMEOUT time.Duration = 300
-	DEFAULT_RESPONSE_TIMEOUT time.Duration = 100
+	DEFAULT_TIMEOUT time.Duration = 300
 )
 
 type Client struct {
-	Key             string
-	Secret          string
-	connectTimeout  time.Duration
-	deadlineTimeout time.Duration
-	responseTimeout time.Duration
+	Key     string
+	Secret  string
+	timeout time.Duration
 }
 
 func NewClient(key string, secret string) *Client {
 	return &Client{
-		Key:             key,
-		Secret:          secret,
-		connectTimeout:  DEFAULT_CONNECT_TIMEOUT,
-		deadlineTimeout: DEFAULT_DEADLINE_TIMEOUT,
-		responseTimeout: DEFAULT_RESPONSE_TIMEOUT,
+		Key:     key,
+		Secret:  secret,
+		timeout: DEFAULT_TIMEOUT,
 	}
 }
 
-func (this *Client) SetConnectTimeout(t time.Duration) {
-	this.connectTimeout = t
-}
-
-func (this *Client) SetResponseTimeout(t time.Duration) {
-	this.responseTimeout = t
+func (this *Client) SetTimeout(t time.Duration) {
+	this.timeout = t
 }
 
 func (this *Client) Sign(req *model.EventRequest) string {
@@ -73,17 +62,7 @@ func (this *Client) SendEvent(gateway string, event *model.Event) ([]model.Event
 	request.Header.Add("charset", "utf-8")
 
 	clt := &http.Client{
-		Transport: &http.Transport{
-			Dial: func(netw, addr string) (net.Conn, error) {
-				conn, err := net.DialTimeout(netw, addr, time.Millisecond*this.connectTimeout)
-				if err != nil {
-					return nil, err
-				}
-				conn.SetDeadline(time.Now().Add(time.Millisecond * this.deadlineTimeout))
-				return conn, nil
-			},
-			ResponseHeaderTimeout: time.Millisecond * this.responseTimeout,
-		},
+		Timeout: time.Millisecond * this.timeout,
 	}
 	resp, err := clt.Do(request)
 	if err != nil {
